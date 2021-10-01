@@ -7,14 +7,14 @@ import theme from '../styles/theme';
 const myTheme = extendTheme(theme);
 
 const GlobalStyle = ({ children }) => (
-    <>
-        <Head>
-            <meta content="width=device-width, initial-scale=1" name="viewport" />
-            <title>Thiago Soares Pereira</title>
-        </Head>
-        <CSSReset />
-        <Global
-            styles={css`
+  <>
+    <Head>
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+      <title>TradeSystem - Gerenciador de trades</title>
+    </Head>
+    <CSSReset />
+    <Global
+      styles={css`
         html {
           scroll-behavior: smooth;
         }
@@ -24,20 +24,20 @@ const GlobalStyle = ({ children }) => (
           min-height: 100vh;
         }
       `}
-        />
-        {children}
-    </>
+    />
+    {children}
+  </>
 );
 
 function MyApp({ Component, pageProps }) {
-    return (
-        <ChakraProvider theme={myTheme}>
-            <AuthProvider>
-                <GlobalStyle />
-                <Component {...pageProps} />
-            </AuthProvider>
-        </ChakraProvider>
-    );
+  return (
+    <ChakraProvider theme={myTheme}>
+      <AuthProvider>
+        <GlobalStyle />
+        <Component {...pageProps} />
+      </AuthProvider>
+    </ChakraProvider>
+  );
 }
 
 export default MyApp;

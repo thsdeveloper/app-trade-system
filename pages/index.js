@@ -1,212 +1,175 @@
-import Head from 'next/head'
-import useAuth from "../hooks/useAuth";
+import { useState } from 'react';
+import Image from 'next/image';
+import {
+  Heading,
+  Button,
+  Flex,
+  Text,
+  Box,
+  SimpleGrid,
+  useColorModeValue,
+  Wrap,
+  WrapItem,
+  Center,
+  Link,
+} from '@chakra-ui/react';
 
-export default function Home() {
-    const {user, signin} = useAuth();
-    console.log('Usuário Firebase:', user);
+import ArtigoCard from '../components/ArtigoCard';
+import useAuth from '../hooks/useAuth';
+import Layout from '../components/Layout';
+import Footer from '../components/Footer';
+import { getAllArtigos } from '../lib/dato-cms';
 
-    return (
-        <div className="container">
-            <Head>
-                <link rel="icon" href="/favicon.ico"/>
-            </Head>
+const Cover = ({ artigos }) => {
+  const [currentArtigos, setArtigos] = useState(artigos);
+  const bgColor = useColorModeValue('#FFFFFF', '#1A202C');
 
-            <main>
-                <h1 className="title">
-                    Bem-vindo ao <a href="https://nextjs.org">TradeSystem</a>
-                </h1>
+  const handleShowAllTechnologies = () => {
+    const artigos = currentArtigos.map((t) => {
+      t.ativo = true;
+      return t;
+    });
+    setArtigos(artigos);
+  };
 
-                <p className="description">
-                    Um aplicativo voltado para o gerenciamento de trades para míni índice e dólar.
-                </p>
+  const hiddenTechnologies = currentArtigos?.filter(
+    (t) => !t.defaultVisible,
+  ).length;
 
-                <div className="grid">
-                    <a href="/dashboard" className="card">
-                        <h3>Sobre o App &rarr;</h3>
-                        <p>Descubra as funcionalidades do APP para gerenciar os seus trades</p>
-                    </a>
-
-                    <a onClick={() => signin()} className="card">
-                        <h3>Logar &rarr;</h3>
-                        <p>Entre com a sua conta do Github.</p>
-                    </a>
-
-                    <a
-                        href="https://github.com/vercel/next.js/tree/master/examples"
-                        className="card"
+  return (
+    <Box bgColor={bgColor}>
+      <Flex justifyContent="center" alignItems="center" py={20}>
+        <Flex
+          px={[4, 8]}
+          py={[0, 20]}
+          w="full"
+          maxW="1200px"
+          direction="column"
+        >
+          <Heading
+            as="h1"
+            fontSize={{ base: '42px', md: '52px', lg: '72px' }}
+            mb={4}
+            fontWeight="xBold"
+          >
+            Sua plataforma de gerenciamento de trades
+            <Box>direto ao ponto </Box>
+            <Box bgGradient="linear(to-l, #7928CA,#FF0080)" bgClip="text">
+              100% free.
+            </Box>
+          </Heading>
+          <Text fontSize={{ base: '16px', md: '20px', lg: '22px' }}>
+            <Box>Mantenha seus trades de míni índice e miní dólar </Box>
+            <Box>com total segurança e transparência de evolução!</Box>
+          </Text>
+          <Box>
+            <Button
+              as="a"
+              my={10}
+              colorScheme="purple"
+              variant="outline"
+              size="lg"
+              href="#series"
+            >
+              Bora começar!
+            </Button>
+          </Box>
+          <Box>
+            <Wrap>
+              {currentArtigos
+                ?.filter((f) => f.ativo)
+                ?.map((artigo) => (
+                  <WrapItem>
+                    <Center
+                      w="100px"
+                      h="100px"
+                      borderWidth="1px"
+                      borderRadius="lg"
+                      overflow="hidden"
+                      flexDirection="column"
                     >
-                        <h3>Examples &rarr;</h3>
-                        <p>Discover and deploy boilerplate example Next.js projects.</p>
-                    </a>
+                      <Image
+                        src={artigo.imagem.url}
+                        alt={artigo.titulo}
+                        width={40}
+                        height={40}
+                        title={artigo.titulo}
+                      />
+                      <Text
+                        fontSize="sm"
+                        textAlign="center"
+                        fontWeight="bold"
+                        mt={2}
+                      >
+                        {artigo.name}
+                      </Text>
+                    </Center>
+                  </WrapItem>
+                ))}
+              {hiddenTechnologies > 0 && (
+                <WrapItem>
+                  <Center
+                    w="100px"
+                    h="100px"
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    overflow="hidden"
+                    flexDirection="column"
+                  >
+                    <Link onClick={handleShowAllTechnologies}>
+                      <Text
+                        fontSize="sm"
+                        textAlign="center"
+                        fontWeight="bold"
+                        mt={2}
+                      >
+                        {`+${hiddenTechnologies} outras`}
+                      </Text>
+                    </Link>
+                  </Center>
+                </WrapItem>
+              )}
+            </Wrap>
+          </Box>
+        </Flex>
+      </Flex>
+    </Box>
+  );
+};
 
-                    <a
-                        href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                        className="card"
-                    >
-                        <h3>Deploy &rarr;</h3>
-                        <p>
-                            Instantly deploy your Next.js site to a public URL with Vercel.
-                        </p>
-                    </a>
-                </div>
-            </main>
+const Artigos = ({ artigos }) => (
+  <Flex id="series" justify="center">
+    <Flex w="full" maxW="1200px" px={[4, 8]} mt={10} direction="column">
+      <Heading mb={4}>Notícias</Heading>
+      <SimpleGrid columns={[1, null, 3]} spacing="40px">
+        {artigos.map((artigo) => (
+          <ArtigoCard artigo={artigo} key={artigo.id} />
+        ))}
+      </SimpleGrid>
+    </Flex>
+  </Flex>
+);
 
-            <footer>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Powered by{' '}
-                    <img src="/vercel.svg" alt="Vercel" className="logo"/>
-                </a>
-            </footer>
-
-            <style jsx>{`
-              .container {
-                min-height: 100vh;
-                padding: 0 0.5rem;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-              }
-
-              main {
-                padding: 5rem 0;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-              }
-
-              footer {
-                width: 100%;
-                height: 100px;
-                border-top: 1px solid #eaeaea;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-
-              footer img {
-                margin-left: 0.5rem;
-              }
-
-              footer a {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-
-              a {
-                color: inherit;
-                text-decoration: none;
-              }
-
-              .title a {
-                color: #0070f3;
-                text-decoration: none;
-              }
-
-              .title a:hover,
-              .title a:focus,
-              .title a:active {
-                text-decoration: underline;
-              }
-
-              .title {
-                margin: 0;
-                line-height: 1.15;
-                font-size: 4rem;
-              }
-
-              .title,
-              .description {
-                text-align: center;
-              }
-
-              .description {
-                line-height: 1.5;
-                font-size: 1.5rem;
-              }
-
-              code {
-                background: #fafafa;
-                border-radius: 5px;
-                padding: 0.75rem;
-                font-size: 1.1rem;
-                font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
-                DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
-              }
-
-              .grid {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-wrap: wrap;
-
-                max-width: 800px;
-                margin-top: 3rem;
-              }
-
-              .card {
-                margin: 1rem;
-                flex-basis: 45%;
-                padding: 1.5rem;
-                text-align: left;
-                color: inherit;
-                text-decoration: none;
-                border: 1px solid #eaeaea;
-                border-radius: 10px;
-                transition: color 0.15s ease, border-color 0.15s ease;
-              }
-
-              .card:hover,
-              .card:focus,
-              .card:active {
-                color: #0070f3;
-                border-color: #0070f3;
-              }
-
-              .card h3 {
-                margin: 0 0 1rem 0;
-                font-size: 1.5rem;
-              }
-
-              .card p {
-                margin: 0;
-                font-size: 1.25rem;
-                line-height: 1.5;
-              }
-
-              .logo {
-                height: 1em;
-              }
-
-              @media (max-width: 600px) {
-                .grid {
-                  width: 100%;
-                  flex-direction: column;
-                }
-              }
-            `}</style>
-
-            <style jsx global>{`
-              html,
-              body {
-                padding: 0;
-                margin: 0;
-                font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-                Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-                sans-serif;
-              }
-
-              * {
-                box-sizing: border-box;
-              }
-            `}</style>
-        </div>
-    )
+export default function Home({ artigos }) {
+  console.log('artugos', artigos);
+  return (
+    <Layout>
+      <Box pb={10}>
+        <Cover artigos={artigos} />
+        <Artigos artigos={artigos} />
+        <Footer />
+      </Box>
+    </Layout>
+  );
 }
+
+export const getStaticProps = async () => {
+  const artigos = await getAllArtigos();
+
+  return {
+    props: {
+      artigos,
+    },
+    revalidate: 120,
+  };
+};

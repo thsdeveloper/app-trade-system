@@ -14,27 +14,14 @@ import {
   Link,
 } from '@chakra-ui/react';
 
-import ArtigoCard from '../components/ArtigoCard';
-import useAuth from '../hooks/useAuth';
-import Layout from '../components/Layout';
-import Footer from '../components/Footer';
-import { getAllArtigos } from '../lib/dato-cms';
+import ArtigoCard from '@src/components/ArtigoCard';
+import Layout from '@src/components/Layout';
+import Footer from '@src/components/Footer';
+import { getAllArtigos } from '@src/lib/dato-cms';
 
 const Cover = ({ artigos }) => {
-  const [currentArtigos, setArtigos] = useState(artigos);
+  const [currentArtigos] = useState(artigos);
   const bgColor = useColorModeValue('#FFFFFF', '#1A202C');
-
-  const handleShowAllTechnologies = () => {
-    const artigos = currentArtigos.map((t) => {
-      t.ativo = true;
-      return t;
-    });
-    setArtigos(artigos);
-  };
-
-  const hiddenTechnologies = currentArtigos?.filter(
-    (t) => !t.defaultVisible,
-  ).length;
 
   return (
     <Box bgColor={bgColor}>
@@ -59,8 +46,8 @@ const Cover = ({ artigos }) => {
             </Box>
           </Heading>
           <Text fontSize={{ base: '16px', md: '20px', lg: '22px' }}>
-            <Box>Mantenha seus trades de míni índice e miní dólar </Box>
-            <Box>com total segurança e transparência de evolução!</Box>
+            Mantenha seus trades de míni índice e miní dólar com total segurança
+            e transparência de evolução!
           </Text>
           <Box>
             <Button
@@ -79,7 +66,7 @@ const Cover = ({ artigos }) => {
               {currentArtigos
                 ?.filter((f) => f.ativo)
                 ?.map((artigo) => (
-                  <WrapItem>
+                  <WrapItem key={artigo.id}>
                     <Center
                       w="100px"
                       h="100px"
@@ -106,29 +93,6 @@ const Cover = ({ artigos }) => {
                     </Center>
                   </WrapItem>
                 ))}
-              {hiddenTechnologies > 0 && (
-                <WrapItem>
-                  <Center
-                    w="100px"
-                    h="100px"
-                    borderWidth="1px"
-                    borderRadius="lg"
-                    overflow="hidden"
-                    flexDirection="column"
-                  >
-                    <Link onClick={handleShowAllTechnologies}>
-                      <Text
-                        fontSize="sm"
-                        textAlign="center"
-                        fontWeight="bold"
-                        mt={2}
-                      >
-                        {`+${hiddenTechnologies} outras`}
-                      </Text>
-                    </Link>
-                  </Center>
-                </WrapItem>
-              )}
             </Wrap>
           </Box>
         </Flex>

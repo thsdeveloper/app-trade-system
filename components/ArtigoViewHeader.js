@@ -7,7 +7,7 @@ import {
   Button,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import useAuth from '../hooks/useAuth';
+import useAuth from '@src/hooks/useAuth';
 
 const ArtigoViewHeader = ({ artigo }) => {
   const bg = useColorModeValue('#FFFFFF', '#1A202C');

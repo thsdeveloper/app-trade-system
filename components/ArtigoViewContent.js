@@ -18,9 +18,9 @@ import {
 } from '@chakra-ui/react';
 import { MdCheckCircle, MdPlayCircleOutline } from 'react-icons/md';
 import Image from 'next/image';
-import useAuth from '../hooks/useAuth';
+import useAuth from '@src/hooks/useAuth';
 import { useRouter } from 'next/router';
-import withAuthModal from '../components/Auth';
+import withAuthModal from '@src/components/Auth';
 
 const ArtigoViewContent = ({ artigo, openAuthModal }) => {
   const { user } = useAuth();

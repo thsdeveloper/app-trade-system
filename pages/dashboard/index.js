@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import useAuth from '../../hooks/useAuth';
+import useAuth from '@src/hooks/useAuth';
 
 export default function Home() {
   const { user } = useAuth();

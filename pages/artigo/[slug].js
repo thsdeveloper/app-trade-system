@@ -1,6 +1,6 @@
-import Layout from '../../components/Layout';
-import { getAllArtigos } from '../../lib/dato-cms';
-import ArtigoView from '../../components/ArtigoView';
+import Layout from '@src/components/Layout';
+import { getAllArtigos } from '@src/lib/dato-cms';
+import ArtigoView from '@src/components/ArtigoView';
 
 function SeriePage({ artigo }) {
   return (

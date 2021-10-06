@@ -1,8 +1,8 @@
 import Head from 'next/head';
 import { ChakraProvider, extendTheme, CSSReset } from '@chakra-ui/react';
 import { Global, css } from '@emotion/react';
-import { AuthProvider } from '../contexts/AuthContext';
-import theme from '../styles/theme';
+import { AuthProvider } from '@src/contexts/AuthContext';
+import theme from '@src/styles/theme';
 
 const myTheme = extendTheme(theme);
 
